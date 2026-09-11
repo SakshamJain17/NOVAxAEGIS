@@ -11,6 +11,7 @@ NOVA uses your Ollama model to converse and propose typed memory actions. AEGIS 
 - AEGIS: read-only memory search, exact-action approval for save, blocked deletion and unknown tools. Approval expires after 120 seconds, is consumed once, and is invalidated by a new turn.
 - Persistent desktop memories and JSONL audit under Electron's userData directory. Browser demo state is intentionally session-only.
 - Interactive knowledge graph, memory inspector, task history/export, policies, provider settings, particle orb, and voice studio.
+- Donna-style Reply desk: paste an incoming WhatsApp message, choose a tone, review NOVA's suggested response, and approve the exact text before it is copied to the clipboard. The app does not connect to WhatsApp or send messages.
 - Continuous microphone capture with energy-based VAD, local whisper.cpp transcription, abortable Ollama and Rime requests, turn fencing, streamed PCM playback, interruption, and full-response playback acknowledgements.
 - An automated stale-result stress fixture, unit/integration-contract tests, a live provider preflight, and an acoustic measurement helper.
 
@@ -32,7 +33,7 @@ Start Ollama if it is not already running:
 ollama serve
 ```
 
-Edit `.env` locally. Set `RIME_API_KEY` to your key, and set `OLLAMA_MODEL` to an installed Qwen model if different. Never put your key in the renderer or commit `.env`. The main process reads `.env` from the directory from which the app is launched. Packaged-app users can supply environment variables before launch; connection preferences except secrets are also editable in the app.
+Edit `.env` locally. Set `RIME_API_KEY` to your key, and set `OLLAMA_MODEL` to an installed Qwen model if different. Never commit `.env`. The main process checks the project folder, launch folder, and packaged executable folder for `.env`. You can also enter a new Rime key in the Electron app under Connections; it is stored locally with restricted file permissions and is never returned to the renderer after saving.
 
 Start a whisper.cpp server on loopback. From a whisper.cpp checkout after downloading/building its model and server:
 

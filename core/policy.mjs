@@ -1,15 +1,19 @@
-export const toolNames = ['search_memory','save_memory','delete_memory'];
+export const toolNames = ['search_memory','save_memory','delete_memory','suggest_whatsapp_reply'];
 export function evaluate(action) {
   if(!action || typeof action!=='object' || !toolNames.includes(action.tool)) return {decision:'block',rule:'TOOL-001',reason:'This tool is outside the permitted workspace.'};
   const a=action.args;
   if(!a || typeof a!=='object'||Array.isArray(a))return {decision:'block',rule:'INPUT-001',reason:'Invalid action parameters.'};
-  const allowed=action.tool==='search_memory'?['query']:action.tool==='save_memory'?['title','content']:['id'];
+  const allowed=action.tool==='search_memory'?['query']:action.tool==='save_memory'?['title','content']:action.tool==='suggest_whatsapp_reply'?['sender','incoming','reply','tone']:['id'];
   if(Object.keys(a).some(k=>!allowed.includes(k)))return {decision:'block',rule:'INPUT-004',reason:'Unexpected action parameters are not permitted.'};
   if(action.tool==='search_memory'){
     if(typeof a.query!=='string'||a.query.length>300)return {decision:'block',rule:'INPUT-002',reason:'Search query must be at most 300 characters.'};
     return {decision:'allow',rule:'MEM-READ',reason:'Read-only search within your NOVA memory.'};
   }
   if(action.tool==='delete_memory')return {decision:'block',rule:'MEM-DELETE',reason:'Deletion is disabled in this release. No memory was removed.'};
+  if(action.tool==='suggest_whatsapp_reply'){
+    if(typeof a.sender!=='string'||a.sender.length>100||typeof a.incoming!=='string'||!a.incoming.trim()||a.incoming.length>4000||typeof a.reply!=='string'||!a.reply.trim()||a.reply.length>2000||typeof a.tone!=='string'||a.tone.length>80)return {decision:'block',rule:'INPUT-005',reason:'A reply needs valid sender, incoming message, tone, and suggested reply fields.'};
+    return {decision:'approval',rule:'MSG-COPY',reason:'Review the exact suggested reply before NOVA copies it to your clipboard. NOVA will not send it.'};
+  }
   if(typeof a.title!=='string'||!a.title.trim()||a.title.length>100||typeof a.content!=='string'||!a.content.trim()||a.content.length>4000)return {decision:'block',rule:'INPUT-003',reason:'A memory needs a title (1–100 characters) and content (1–4,000 characters).'};
   return {decision:'approval',rule:'MEM-WRITE',reason:'Saving creates a persistent memory. Review the exact text before approving.'};
 }
