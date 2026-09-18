@@ -1,53 +1,17 @@
 {
-  "name": "nova-aegis",
-  "version": "0.1.0",
-  "private": true,
-  "description": "Voice-first governed desktop workspace",
-  "main": "desktop/main.cjs",
+  "name": "nova-ai",
+  "version": "2.0.0",
+  "description": "NOVA Personal AI Desktop Interface",
+  "main": "electron.js",
   "scripts": {
     "start": "electron .",
-    "test": "node --test tests/*.test.mjs",
-    "preflight": "node --env-file-if-exists=.env scripts/preflight.mjs",
-    "package": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dev": "electron ."
   },
   "devDependencies": {
-    "electron": "^44.2.0",
-    "electron-builder": "^26.0.0"
+    "@electron/packager": "^20.3.0",
+    "electron": "^44.0.0"
   },
-  "build": {
-    "appId": "ai.nova.aegis",
-    "productName": "NOVA AEGIS",
-    "files": [
-      "desktop/**",
-      "core/**",
-      "dist/**",
-      "package.json",
-      "!dist/nova-aegis-source.zip"
-    ],
-    "mac": {
-      "category": "public.app-category.productivity",
-      "target": [
-        "dmg"
-      ],
-      "extendInfo": {
-        "NSMicrophoneUsageDescription": "NOVA listens to your commands and interruptions during voice sessions."
-      }
-    },
-    "win": {
-      "target": [
-        "nsis"
-      ]
-    },
-    "linux": {
-      "target": [
-        "AppImage"
-      ]
-    },
-    "directories": {
-      "output": "release"
-    }
-  },
-  "type": "module",
-  "author": "NOVA AEGIS"
+  "dependencies": {
+    "three": "^0.185.1"
+  }
 }

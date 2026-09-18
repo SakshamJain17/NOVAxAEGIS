@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA AI</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+</head>
+<body class="chatgpt-shell">
+    <div id="background" aria-hidden="true">
+        <div class="ambient ambient-one"></div>
+        <div class="ambient ambient-two"></div>
+        <div class="vignette"></div>
+    </div>
+
+    <div class="app-shell">
+        <aside id="sidebar" class="sidebar" aria-label="Chat history">
+            <div class="sidebar-top">
+                <button id="sidebar-toggle" class="icon-button sidebar-toggle" aria-label="Collapse sidebar" title="Collapse sidebar">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16M4 12h16M4 18.5h16"/></svg>
+                </button>
+                <div class="sidebar-brand"><span class="mini-orb"></span><span class="brand-word">NOVA</span></div>
+            </div>
+
+            <button id="new-chat-button" class="new-chat-button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>New chat</span>
+            </button>
+
+            <label class="search-box" for="chat-search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>
+                <input id="chat-search" type="search" placeholder="Search chats" autocomplete="off">
+            </label>
+
+            <div class="history-label">Chats</div>
+            <nav id="chat-history" class="chat-history"></nav>
+
+            <div class="sidebar-footer">
+                <button class="profile-button" type="button">
+                    <span class="profile-avatar">S</span>
+                    <span class="profile-copy"><strong>Saksham</strong><small>NOVA workspace</small></span>
+                    <span class="profile-more">•••</span>
+                </button>
+            </div>
+        </aside>
+
+        <section class="main-panel">
+            <header class="chat-header">
+                <div class="header-left">
+                    <button id="mobile-sidebar-button" class="icon-button mobile-sidebar-button" aria-label="Open chat history">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16M4 12h16M4 18.5h16"/></svg>
+                    </button>
+                    <button class="model-picker" type="button">NOVA <span>⌄</span></button>
+                </div>
+                <div class="header-actions">
+                    <div class="connection-pill"><span class="status-indicator"></span><span id="core-status">STANDBY</span></div>
+                    <time id="system-time">--:--:--</time>
+                    <button id="minimize-button" class="window-button" title="Minimize">−</button>
+                    <button id="maximize-button" class="window-button" title="Maximize">□</button>
+                    <button id="exit-button" class="window-button exit-window" title="Exit">×</button>
+                </div>
+            </header>
+
+            <main class="chat-main">
+                <div id="conversation" class="conversation" aria-live="polite">
+                    <section id="welcome-screen" class="welcome-screen">
+                        <div class="orb-stage">
+                            <div id="orb-container" class="orb-container"></div>
+                            <div class="orb-aura"></div>
+                            <div class="orb-label"><span id="orb-state" class="orb-state">STANDBY</span><span class="orb-caption">NEURAL CORE</span></div>
+                        </div>
+                        <h1>How can I help you today?</h1>
+                        <p>NOVA is online and ready to think, create, and act with you.</p>
+                        <div class="prompt-grid">
+                            <button class="prompt-card" data-prompt="Help me plan my day"><strong>Plan my day</strong><span>Turn priorities into a focused schedule</span></button>
+                            <button class="prompt-card" data-prompt="Summarize what I should focus on today"><strong>Find my focus</strong><span>Surface the work that matters most</span></button>
+                            <button class="prompt-card" data-prompt="Brainstorm a new idea with me"><strong>Brainstorm</strong><span>Explore and develop a new idea</span></button>
+                            <button class="prompt-card" data-prompt="What can you help me with?"><strong>Explore NOVA</strong><span>See available skills and capabilities</span></button>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="composer-wrap">
+                    <div class="command-bar">
+                        <button class="attach-button" type="button" title="Attach file" aria-label="Attach file">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                        </button>
+                        <textarea id="command-input" rows="1" autocomplete="off" placeholder="Message NOVA"></textarea>
+                        <button id="stop-button" class="composer-action stop-button" title="Stop NOVA speech" aria-label="Stop NOVA speech">■</button>
+                        <button id="mic-button" class="composer-action mic-button" title="Voice input" aria-label="Voice input">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3M9 21h6"/></svg>
+                        </button>
+                        <button id="send-button" class="send-button" title="Send message" aria-label="Send message">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6.5 10.5 12 5l5.5 5.5"/></svg>
+                        </button>
+                    </div>
+                    <div class="composer-meta"><span>NOVA can make mistakes. Check important information.</span><span id="message-count">0</span></div>
+                </div>
+            </main>
+
+            <div class="system-drawer" aria-hidden="true">
+                <div id="activity"></div>
+                <div id="voice-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <span id="voice-status">READY</span>
+            </div>
+        </section>
+    </div>
+    <div id="mobile-backdrop" class="mobile-backdrop"></div>
+    <script src="app.js"></script>
+</body>
+</html>
